@@ -66,7 +66,7 @@ void print_usage (char * argv0)
   fprintf (stdout, "OPTIONS FOR FILES\n");
   fprintf (stdout, "  -i --input\tinput wav file (default: stdin)\n");
   fprintf (stdout, "  -o --output\toutput mid file"
-	   " (default: 'output.mid')\n");
+	   " (default: input basename + '.mid' or output.mid for stdin)\n");
   fprintf (stdout, "\toptions -i and -o have argument '-' "
 	   "as stdin/stdout\n");
   fprintf (stdout, "  -p --patch\tpatch file (default: no patch)\n");
@@ -376,7 +376,21 @@ int main (int argc, char** argv)
 	{
 	  show_version = 1;
 	}
-      else
+	else if (argv[i][0] != '-' && file_wav == NULL)
+	{
+		file_wav = (char *)malloc (sizeof (char)
+					 * (strlen (argv[i]) + 1));
+		CHECK_MALLOC (file_wav, "main");
+	    strcpy(file_wav,argv[i]);
+	}
+	else if (argv[i][0] != '-' && file_midi == NULL)
+	{
+		file_midi = (char *)malloc (sizeof (char)
+					 * (strlen (argv[i]) + 1));
+		CHECK_MALLOC (file_midi, "main");
+	    strcpy(file_midi,argv[i]);
+	}
+    else
 	{
 	  show_help = 1;
 	}
@@ -461,9 +475,22 @@ int main (int argc, char** argv)
   // MIDI output
   if (file_midi == NULL)
     {
-      file_midi = (char *)malloc (sizeof (char) * (strlen("output.mid") + 1));
+		if(file_wav != NULL){
+      file_midi = (char *)malloc (sizeof (char) * (strlen(file_wav) + 5));
       CHECK_MALLOC (file_midi, "main");
-      strcpy (file_midi, "output.mid");
+	  char *pos=strrchr(file_wav,(int)'.');
+	  if(pos != NULL)
+	  	strncpy(file_midi, file_wav, pos-file_wav);
+      else
+	  	strcpy (file_midi, file_wav);
+	  strcat(file_midi, ".mid");
+		}
+		else
+		{
+			file_midi = (char *)malloc (sizeof (char) * (strlen("output.mid") + 1));
+			CHECK_MALLOC (file_midi, "main");
+			strcpy (file_midi, "output.mid");
+		}
     }
 
   // open input wav file
