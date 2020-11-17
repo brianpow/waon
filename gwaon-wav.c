@@ -17,6 +17,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 #include <gtk/gtk.h>
+#include <glib.h>
+#include <glib/gi18n.h>
 #include <gdk/gdkkeysyms.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <stdio.h> /* for check */
@@ -2658,43 +2660,43 @@ create_wav (void)
   gtk_box_pack_start (GTK_BOX (main_vbox), b_hbox, FALSE, FALSE, 0);
   gtk_widget_show (b_hbox);
 
-  GtkWidget *b_play = gtk_button_new_with_label (" play ");
+  GtkWidget *b_play = gtk_button_new_with_label (_(" play "));
   gtk_box_pack_start (GTK_BOX (b_hbox), b_play, FALSE, FALSE, 0);
   gtk_widget_show (b_play);
   gtk_signal_connect (GTK_OBJECT (b_play), "clicked",
                       (GtkSignalFunc) b_play_press_event, NULL);
 
-  GtkWidget *b_stop = gtk_button_new_with_label (" stop ");
+  GtkWidget *b_stop = gtk_button_new_with_label (_(" stop "));
   gtk_box_pack_start (GTK_BOX (b_hbox), b_stop, FALSE, FALSE, 0);
   gtk_widget_show (b_stop);
   gtk_signal_connect (GTK_OBJECT (b_stop), "clicked",
                       (GtkSignalFunc) b_play_press_event, NULL);
 
-  GtkWidget *b_mode_up = gtk_button_new_with_label (" mode ");
+  GtkWidget *b_mode_up = gtk_button_new_with_label (_(" mode "));
   gtk_box_pack_start (GTK_BOX (b_hbox), b_mode_up, FALSE, FALSE, 0);
   gtk_widget_show (b_mode_up);
 
-  GtkWidget *b_fft_down = gtk_button_new_with_label (" FFT- ");
+  GtkWidget *b_fft_down = gtk_button_new_with_label (_(" FFT- "));
   gtk_box_pack_start (GTK_BOX (b_hbox), b_fft_down, FALSE, FALSE, 0);
   gtk_widget_show (b_fft_down);
 
-  GtkWidget *b_fft_up = gtk_button_new_with_label (" FFT+ ");
+  GtkWidget *b_fft_up = gtk_button_new_with_label (_(" FFT+ "));
   gtk_box_pack_start (GTK_BOX (b_hbox), b_fft_up, FALSE, FALSE, 0);
   gtk_widget_show (b_fft_up);
 
-  GtkWidget *b_window_up = gtk_button_new_with_label (" window ");
+  GtkWidget *b_window_up = gtk_button_new_with_label (_(" window "));
   gtk_box_pack_start (GTK_BOX (b_hbox), b_window_up, FALSE, FALSE, 0);
   gtk_widget_show (b_window_up);
 
-  GtkWidget *b_hop_down = gtk_button_new_with_label (" hop- ");
+  GtkWidget *b_hop_down = gtk_button_new_with_label (_(" hop- "));
   gtk_box_pack_start (GTK_BOX (b_hbox), b_hop_down, FALSE, FALSE, 0);
   gtk_widget_show (b_hop_down);
 
-  GtkWidget *b_hop_up = gtk_button_new_with_label (" hop+ ");
+  GtkWidget *b_hop_up = gtk_button_new_with_label (_(" hop+ "));
   gtk_box_pack_start (GTK_BOX (b_hbox), b_hop_up, FALSE, FALSE, 0);
   gtk_widget_show (b_hop_up);
 
-  GtkWidget *b_lock = gtk_button_new_with_label (" lock ");
+  GtkWidget *b_lock = gtk_button_new_with_label (_(" lock "));
   gtk_box_pack_start (GTK_BOX (b_hbox), b_lock, FALSE, FALSE, 0);
   gtk_widget_show (b_lock);
 
@@ -2703,7 +2705,7 @@ create_wav (void)
   gtk_box_pack_start (GTK_BOX (b_hbox), b_spacing, TRUE, TRUE, 0);
   gtk_widget_show (b_spacing);
 
-  GtkWidget *b_close = gtk_button_new_with_label (" close ");
+  GtkWidget *b_close = gtk_button_new_with_label (_(" close "));
   gtk_box_pack_start (GTK_BOX (b_hbox), b_close, FALSE, FALSE, 0);
   gtk_widget_show (b_close);
   gtk_signal_connect (GTK_OBJECT (b_close), "clicked",
@@ -2811,7 +2813,7 @@ create_wav (void)
   gtk_box_pack_start (GTK_BOX (hbox), rate_vbox, FALSE, FALSE, 0);
   gtk_widget_show (rate_vbox);
 
-  GtkWidget *rate_label = gtk_label_new (" rate ");
+  GtkWidget *rate_label = gtk_label_new (_(" rate "));
   gtk_misc_set_alignment (GTK_MISC (rate_label), 0, 0);
   gtk_box_pack_start (GTK_BOX (rate_vbox), rate_label, FALSE, FALSE, 0);
   gtk_widget_show (rate_label);
@@ -2843,7 +2845,7 @@ create_wav (void)
   gtk_box_pack_start (GTK_BOX (hbox), pitch_vbox, FALSE, FALSE, 0);
   gtk_widget_show (pitch_vbox);
 
-  GtkWidget *pitch_label = gtk_label_new (" pitch ");
+  GtkWidget *pitch_label = gtk_label_new (_(" pitch "));
   gtk_misc_set_alignment (GTK_MISC (pitch_label), 0, 0);
   gtk_box_pack_start (GTK_BOX (pitch_vbox), pitch_label, FALSE, FALSE, 0);
   gtk_widget_show (pitch_label);

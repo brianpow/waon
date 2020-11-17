@@ -18,6 +18,8 @@
  */
 #include <stdio.h> /* fprintf() */
 #include <gtk/gtk.h>
+#include <glib.h>
+#include <glib/gi18n.h>
 
 #include <string.h> // memset()
 
@@ -41,13 +43,13 @@ on_preference (void)
 
 /* Get the selected filename and print it to the console */
 static void
-on_file_open_wav_sel_ok (GtkWidget *widget, GtkFileSelection *fs)
+on_file_open_wav_sel_ok (char *filename) //GtkWidget *widget, GtkFileSelection *fs)
 {
   extern SNDFILE *sf;
   extern SF_INFO sfinfo;
 
-  gchar *filename =
-    (gchar *) gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs));
+  // gchar *filename =
+  //   (gchar *) gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs));
   g_print ("%s\n", filename);
 
 
@@ -72,12 +74,48 @@ on_file_open_wav_sel_ok (GtkWidget *widget, GtkFileSelection *fs)
 
   create_wav ();
 
-  gtk_widget_destroy (GTK_WIDGET (fs));
+  // gtk_widget_destroy (GTK_WIDGET (fs));
 }
 
 static void
 on_file_open_wav (GtkWidget *widget, gpointer data)
 {
+  GtkWidget *dialog;
+  dialog = gtk_file_chooser_dialog_new (_("Open File"),
+                                      GTK_WINDOW(data),
+                                      GTK_FILE_CHOOSER_ACTION_OPEN,
+                                      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                                      NULL);
+
+GtkFileFilter *filter = gtk_file_filter_new ();
+gtk_file_filter_add_mime_type (filter, "audio/wav");
+gtk_file_filter_add_mime_type (filter, "audio/ogg");
+gtk_file_filter_add_mime_type (filter, "audio/flac");
+gtk_file_filter_set_name (filter, "Supported Audio (wav,ogg,flac)");
+
+gtk_file_chooser_add_filter (GTK_FILE_CHOOSER(dialog), filter);
+
+ filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (filter, _("All files"));
+  gtk_file_filter_add_pattern (filter, "*");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER(dialog), filter);
+
+// g_object_unref (filter);
+
+if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+  {
+    char *filename;
+
+    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+    g_print ("%s\n", filename);
+    on_file_open_wav_sel_ok(filename);
+    g_free (filename);
+  }
+
+  gtk_widget_destroy (dialog);
+}
+void v(){
   /* Create a new file selection widget */
   GtkWidget *filew = gtk_file_selection_new ("File selection");
 
@@ -153,7 +191,7 @@ create_menu (void)
   /* File -> Open WAV */
   menuitem = gtk_menu_item_new_with_label ("Open WAV");
   gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-		      GTK_SIGNAL_FUNC (on_file_open_wav), NULL);
+		      GTK_SIGNAL_FUNC (on_file_open_wav), (gpointer) window);
   gtk_widget_add_accelerator (menuitem, "activate", accel_group,
 			      'O', GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
   gtk_menu_append (GTK_MENU (menu), menuitem);

@@ -376,19 +376,24 @@ int main (int argc, char** argv)
 	{
 	  show_version = 1;
 	}
-	else if (argv[i][0] != '-' && file_wav == NULL)
+	else if ((strlen(argv[i]) > 1 && argv[i][0] != '-' ) || strcmp(argv[i],"-") == 0)
 	{
-		file_wav = (char *)malloc (sizeof (char)
-					 * (strlen (argv[i]) + 1));
-		CHECK_MALLOC (file_wav, "main");
-	    strcpy(file_wav,argv[i]);
-	}
-	else if (argv[i][0] != '-' && file_midi == NULL)
-	{
-		file_midi = (char *)malloc (sizeof (char)
-					 * (strlen (argv[i]) + 1));
-		CHECK_MALLOC (file_midi, "main");
-	    strcpy(file_midi,argv[i]);
+		if(file_wav == NULL)
+		{
+			file_wav = (char *)malloc (sizeof (char)
+						* (strlen (argv[i]) + 1));
+			CHECK_MALLOC (file_wav, "main");
+			strcpy(file_wav,argv[i]);
+		}
+		else if (file_midi == NULL)
+		{
+			file_midi = (char *)malloc (sizeof (char)
+						* (strlen (argv[i]) + 1));
+			CHECK_MALLOC (file_midi, "main");
+			strcpy(file_midi,argv[i]);
+		}
+		else
+			show_help = 1;
 	}
     else
 	{
